@@ -18,18 +18,17 @@ body{
   background:radial-gradient(circle at top, #00f6ff, #02030f 70%);
   font-family:Arial, sans-serif;
   color:white;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 .glow-bg{
   position:absolute;
   inset:0;
   background:radial-gradient(circle at center, rgba(0,246,255,.15), transparent 70%);
-  animation:pulse 4s infinite;
+  animation:pulse 4s infinite alternate;
 }
 @keyframes pulse{
   0%{opacity:.4}
-  50%{opacity:.8}
-  100%{opacity:.4}
+  100%{opacity:.8}
 }
 .card{
   position:relative;
@@ -48,13 +47,12 @@ body{
   border-radius:50%;
   border:3px solid #00f6ff;
   object-fit:cover;
-  box-shadow:0 0 20px #00f6ff;
-  animation:spinGlow 6s linear infinite;
+  box-shadow:0 0 25px #00f6ff;
+  animation:glowPulse 2s ease-in-out infinite alternate;
 }
-@keyframes spinGlow{
+@keyframes glowPulse{
   0%{box-shadow:0 0 15px #00f6ff;}
-  50%{box-shadow:0 0 35px #00f6ff;}
-  100%{box-shadow:0 0 15px #00f6ff;}
+  100%{box-shadow:0 0 35px #00f6ff;}
 }
 h1{
   margin:15px 0 5px;
@@ -86,6 +84,7 @@ h1{
   font-size:24px;
   cursor:pointer;
   box-shadow:0 0 25px #00f6ff;
+  transition:.3s;
 }
 .music-btn:hover{
   transform:scale(1.1);
@@ -98,7 +97,7 @@ h1{
 <div class="glow-bg"></div>
 
 <div class="card">
-  <img src="profile.jpg" class="profile">
+  <img src="profile.jpg" alt="Profile Picture" class="profile">
   <h1>Ankzxr_13</h1>
   <p class="bio">FiveM | RP | Night Drive 🌃</p>
 
@@ -112,16 +111,20 @@ h1{
     <i id="icon" class="fas fa-volume-up"></i>
   </button>
 
-  <audio id="bgm" loop>
+  <audio id="bgm" loop autoplay>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 </div>
 
 <script>
-let playing=false;
+let playing=true; // เริ่มเล่นอัตโนมัติ
+const music=document.getElementById("bgm");
+const icon=document.getElementById("icon");
+
+// พยายามเล่นเพลงทันที (บางเบราว์เซอร์ต้องมี user interaction)
+music.play().catch(()=>{playing=false; icon.className="fas fa-volume-up";});
+
 function toggleMusic(){
-  const music=document.getElementById("bgm");
-  const icon=document.getElementById("icon");
   if(!playing){
     music.play();
     icon.className="fas fa-volume-mute";
